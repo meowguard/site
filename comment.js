@@ -1,4 +1,4 @@
-// const url = "http://localhost:8888/";
+const url = "http://c.meowguardon.top:8888/";
 let un = null;
 
 const $ = (x, y = document) => y.querySelector(x);
