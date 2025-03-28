@@ -6,9 +6,9 @@ const path = 'messages.txt';
 const port = 8888;
 const ssl = {
   key: fs.readFileSync(
-    '/etc/letsencrypt/live/c.meowguardon.top/privkey.pem',),
+    './privkey.pem',),
   cert: fs.readFileSync(
-    '/etc/letsencrypt/live/c.meowguardon.top/fullchain.pem',),
+    './fullchain.pem',),
 };
 const badwords = fs.readFileSync('./badwords.txt').toString();
 
