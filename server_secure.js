@@ -47,9 +47,12 @@ const svr = https.createServer(ssl, async (req, res) => {
     }
     cooldown[un] = Date.now();
     body = body.toString().replace('\n', '');
-    if (!badwords.every(x => !body.includes(x))) {
-      console.log(un, 'tried to say banned word', )
-      return res.writeHead(500).end('false');
+    let bw = badwords.map(x => [x, body.includes(x)]).filter(x => x[1]).map(x => x[0]);
+    if (bw.length > 0) {
+      console.log(un, 'tried to say banned words: ', bw.join(', '));
+      bw.forEach(x => {
+        body = body.replaceAll(x, '*'.repeat(x.length));
+      });
     }
     body = un + ': ' + body;
     console.log(un, 'sent', body);
