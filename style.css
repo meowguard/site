@@ -1,0 +1,34 @@
+body {
+  font-family: monospace;
+  background: #222;
+  color: #fff;
+  font-size: 20px;
+}
+
+.b {
+  font-weight: bold;
+}
+
+a:visited {
+  color: #a4a;
+}
+
+a {
+  color: #44f;
+}
+
+#comments {
+  border: 2px solid #888;
+  padding: 5px;
+  height: 300px;
+  overflow: scroll;
+}
+
+#message {
+  all: unset;
+  margin-top: 8px;
+  border: 2px solid #888;
+  padding: 5px;
+  height: 30px;
+  width: calc(100% - 13px);
+}
