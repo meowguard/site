@@ -32,3 +32,7 @@ a {
   height: 30px;
   width: calc(100% - 13px);
 }
+
+img {
+  height: 15px
+}
