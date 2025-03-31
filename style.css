@@ -14,10 +14,11 @@ body {
   background: #222;
   color: #fff;
   font-size: 20px;
+  font-weight: bold;
 }
 
 .b {
-  font-weight: bold;
+  font-weight: normal;
 }
 
 a:visited {
