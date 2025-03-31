@@ -17,6 +17,10 @@ body {
   font-weight: bold;
 }
 
+h1, h3 {
+  font-weight: bold;
+}
+
 .b {
   font-weight: normal;
 }
