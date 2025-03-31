@@ -1,5 +1,16 @@
+@font-face {
+    font-family: Minecraft;
+    src: url("mc.otf") format("opentype");
+}
+
+@font-face {
+    font-family: Minecraft;
+    font-weight: bold;
+    src: url("mcbold.otf") format("opentype");
+}
+
 body {
-  font-family: monospace;
+  font-family: Minecraft;
   background: #222;
   color: #fff;
   font-size: 20px;
