@@ -22,7 +22,7 @@ getmessages();
 
 const svr = https.createServer(ssl, async (req, res) => {
   res.setHeader('access-control-allow-origin', '*');
-  let un = username(req.socket.remoteAddress);
+  let un = username(req.socket.remoteAddress + req.headers['user-agent']);
   let body = [];
   if (req.method == 'POST') {
     await new Promise((y, n) => {
@@ -117,3 +117,8 @@ function username(ip) {
   h = h.digest('base64');
   return h.slice(0, 4).replaceAll('/', '_').replaceAll('+', '-');
 }
+
+// let aliases = {
+//   O6u1: 'meow',
+//   OXqw: 'zast'
+// };
