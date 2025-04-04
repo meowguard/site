@@ -22,7 +22,7 @@ getmessages();
 
 const svr = https.createServer(ssl, async (req, res) => {
   res.setHeader('access-control-allow-origin', '*');
-  let un = username(req.socket.remoteAddress + req.headers['user-agent']);
+  let un = username(req.socket.remoteAddress/* + req.headers['user-agent']*/);
   let body = [];
   if (req.method == 'POST') {
     await new Promise((y, n) => {
@@ -48,12 +48,33 @@ const svr = https.createServer(ssl, async (req, res) => {
     }
     cooldown[un] = Date.now();
     body = body.toString().replace('\n', '');
-    let bw = badwords.map(x => [x, body.includes(x)]).filter(x => x[1]).map(x => x[0]);
+    body = body.replace(/^[A-Za-z0-9 ]/g, '').trim() + ' ';
+    let bwbody = body.replace(/^[A-Za-z0-9]/g, '')
+    let bw = badwords.map(x => [x, bwbody.includes(x)]).filter(x => x[1]).map(x => x[0]);
     if (bw.length > 0) {
       console.log(un, 'tried to say banned words: ', bw.join(', '));
       bw.forEach(x => {
-        body = body.replaceAll(x, '*'.repeat(x.length));
+        let s = 0;
+        let j = 0;
+        for (let i = 0; i < body.length + 1; i++) {
+          let l = /[A-Za-z0-9]/.test(body[i]);
+          if (l && (body[i]).toLowerCase() == x[j]) {
+            if (!s) s = i;
+            j++;
+            if (j == x.length) {
+              body = body.slice(0, s) + '*'.repeat(j) + body.slice(j + s);
+              j = s = 0;
+            }
+          } else if (l) j = s = 0;
+        }
       });
+    }
+    body = body.trim();
+    if (body.length < 3 || body.length > 100) {
+      console.log(un, 'length too long / small');
+      return res
+        .writeHead(429, '429 Too Many Requests')
+        .end('429 Too Many Requests');
     }
     body = un + ': ' + body;
     console.log(un, 'sent', body);
