@@ -58,9 +58,9 @@ const svr = https.createServer(ssl, async (req, res) => {
       bw.forEach(x => {
         let s = 0;
         let j = 0;
-        for (let i = 0; i < body.length + 1; i++) {
+        for (let i = 0; i < body.length; i++) {
           let l = /[A-Za-z0-9]/.test(body[i]);
-          if (l && (body[i]).toLowerCase() == x[j]) {
+          if (l && body[i].toLowerCase() == x[j]) {
             if (!s) s = i;
             j++;
             if (j == x.length) {
