@@ -11,6 +11,7 @@ const ssl = {
     '/etc/letsencrypt/live/c.meowguardon.top/fullchain.pem',),
 };
 const badwords = fs.readFileSync('./badwords.txt').toString().split('\n')
+  .push(":)")
   .sort((a, b) => b.length - a.length);
 
 const CD = 20e3;
