@@ -50,8 +50,8 @@ const svr = https.createServer(ssl, async (req, res) => {
     }
     cooldown[un] = Date.now();
     body = body.toString().replace('\n', '');
-    body = body.replace(/^[A-Za-z0-9 ]/g, '').trim() + ' ';
-    let bwbody = body.replace(/^[A-Za-z0-9]/g, '')
+    body = body.replace(/[^A-Za-z0-9 ]/g, '').trim() + ' ';
+    let bwbody = body.replace(/[^A-Za-z0-9]/g, '')
     let bw = badwords.map(x => [x, bwbody.includes(x)]).filter(x => x[1]).map(x => x[0]);
     if (bw.length > 0) {
       console.log(un, 'tried to say banned words: ', bw.join(', '));
