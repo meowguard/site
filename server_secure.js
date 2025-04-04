@@ -85,7 +85,7 @@ const svr = https.createServer(ssl, async (req, res) => {
       return res.end("Invalid signature");
     }
     console.log("Received push event. Pulling changes...");
-    exec("cd ~/meowguard/site/ && git pull && pm2 reload server-secure.js", (err, stdout, stderr) => {
+    exec("cd ~/meowguard/site/ && git pull && pm2 reload server_secure.js", (err, stdout, stderr) => {
       if (err) {
         console.error(`Error: ${stderr}`);
         res.writeHead(500, { "Content-Type": "text/plain" });
