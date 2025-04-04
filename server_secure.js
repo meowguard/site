@@ -1,6 +1,7 @@
 const https = require('https');
 const fs = require('fs');
 const crypto = require('crypto');
+const { exec } = require('child_process');
 
 const path = 'messages.txt';
 const port = 8888;
@@ -10,6 +11,7 @@ const ssl = {
   cert: fs.readFileSync(
     '/etc/letsencrypt/live/c.meowguardon.top/fullchain.pem',),
 };
+const SECRET = fs.readFileSync('./.secret').toString().trim();
 const badwords = fs.readFileSync('./badwords.txt').toString().split('\n')
   .sort((a, b) => b.length - a.length);
 
@@ -93,7 +95,29 @@ const svr = https.createServer(ssl, async (req, res) => {
         (cd ? '\nCooldown reached, ' +
           Math.floor((CD - Date.now() + cooldown[un]) / 1e3) + ' seconds left' : ''),
       );
-  } else {
+  }
+  else if (url == '/pull' && req.method == 'POST') {
+    const signature = `sha256=${crypto
+      .createHmac("sha256", SECRET)
+      .update(body)
+      .digest("hex")}`;
+    if (req.headers["x-hub-signature-256"] !== signature) {
+      res.writeHead(401, { "Content-Type": "text/plain" });
+      return res.end("Invalid signature");
+    }
+    console.log("Received push event. Pulling changes...");
+    exec("cd ~/meowguard/site/ && git pull && sleep 5 && pm2 restart server_secure.js", (err, stdout, stderr) => {
+      if (err) {
+        console.error(`Error: ${stderr}`);
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        return res.end("Error executing commands");
+      }
+      console.log(stdout);
+      res.writeHead(200, { "Content-Type": "text/plain" });
+      res.end("Updated and restarted successfully");
+    });
+  }
+  else {
     console.log(un, 'tried', req.url);
     res.writeHead(404, '404 Not Found').end('404 Not Found');
   }
